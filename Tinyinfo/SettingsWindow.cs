@@ -28,23 +28,36 @@ namespace Tinyinfo
 				darkThemeRadioButton.Checked = false;
 				this.BackColor = Color.White;
 				this.ForeColor = Color.Black;
+				themeTab.BackColor = Color.White;
+				themeTab.ForeColor = Color.Black;
+				generalTab.BackColor = Color.White;
+				generalTab.ForeColor = Color.Black;
+				fontButton.ForeColor = Color.Black;
 				applyButton.ForeColor = Color.Black;
 				cancelButton.ForeColor = Color.Black;
-				
+
 			}
 			else
 			{
 				//	dark theme
 				lightThemeRadioButton.Checked = false;
 				darkThemeRadioButton.Checked = true;
-				ActiveForm.BackColor = Color.Black;
+				ActiveForm.BackColor = Color.Gray;
 				ActiveForm.ForeColor = Color.White;
+				themeTab.BackColor = Color.DimGray;
+				themeTab.ForeColor = Color.White;
+				generalTab.BackColor = Color.DimGray;
+				generalTab.ForeColor = Color.White;
+				fontButton.ForeColor = Color.Black;
 				applyButton.ForeColor = Color.Black;
 				cancelButton.ForeColor = Color.Black;
 			}
 
 			//	load font size setting
 			fontSizeUpDown.Value = Convert.ToInt32(data.GetKey("tinyinfo.font"));
+
+			//	load refresh rate setting
+			refreshRateUpDown.Value = Convert.ToInt32(data.GetKey("tinyinfo.refresh"));
 		}
 
 		public void refreshTheme()
@@ -52,7 +65,7 @@ namespace Tinyinfo
 			//	Check if file exists, if it doesnt create it with default settings
 			if (File.Exists("./tinyinfo.ini") == false)
 			{
-				File.WriteAllText("./tinyinfo.ini", "[tinyinfo]\ntheme=light\nfont=10");
+				File.WriteAllText("./tinyinfo.ini", "[tinyinfo]\ntheme=light\nfont=10\nrefresh=500");
 			}
 
 			//	Create ini parser and read ini file
@@ -65,7 +78,12 @@ namespace Tinyinfo
 			{
 				//	Dark theme
 				ForeColor = Color.White;
-				BackColor = Color.Black;
+				BackColor = Color.Gray;
+				themeTab.BackColor = Color.DimGray;
+				themeTab.ForeColor = Color.White;
+				generalTab.BackColor = Color.DimGray;
+				generalTab.ForeColor = Color.White;
+				fontButton.ForeColor = Color.Black;
 				applyButton.ForeColor = Color.Black;
 				cancelButton.ForeColor = Color.Black;
 			}
@@ -74,6 +92,11 @@ namespace Tinyinfo
 				//	Light theme
 				ForeColor = Color.Black;
 				BackColor = Color.White;
+				themeTab.BackColor = Color.White;
+				themeTab.ForeColor = Color.Black;
+				generalTab.BackColor = Color.White;
+				generalTab.ForeColor = Color.Black;
+				fontButton.ForeColor = Color.Black;
 				applyButton.ForeColor = Color.Black;
 				cancelButton.ForeColor = Color.Black;
 			}
@@ -103,8 +126,17 @@ namespace Tinyinfo
 			data["tinyinfo"]["font"] = fontSizeUpDown.Value.ToString();
 			parser.WriteFile("./tinyinfo.ini", data);
 
+			//	wrire refresh rate into ini file
+			data["tinyinfo"]["refresh"] = refreshRateUpDown.Value.ToString();
+			parser.WriteFile("./tinyinfo.ini", data);
+
 			//	reload theme
 			refreshTheme();
+		}
+
+		private void fontButton_Click(object sender, EventArgs e)
+		{
+			fontDialog.ShowDialog();
 		}
 	}
 }
